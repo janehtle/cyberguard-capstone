@@ -17,17 +17,24 @@ Users take a short quiz featuring scenarios involving phishing, scams, strong pa
 
 # Tech Stack
 
-Frontend: React (Vite)
-Backend: Node.js, Express.js
-Database: ...
-Deployment: AWS Amplify
+**Frontend:** React (Vite)
+
+**Backend:** Node.js, Express.js
+
+**Database:** ...
+
+**Deployment:** AWS Amplify
 
 # Team
 
 Cyber Lead - Ismael Salinas 
+
 Project Lead - Jane Le
+
 Frontend Lead - Helena Lian
+
 Backend Lead - Michael Howey
+
 Test Lead - H'Thanh Nay
 
 # License
