@@ -1,16 +1,33 @@
-# React + Vite
+# 🛡️ CyberGuard 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Problem Statement:** Many individuals are unaware of daily cybersecurity threats or how to respond to them effectively. Traditional training is often "boring," text heavy, or too technical for beginners. There is a need for fun, engaging, and simple cybersecurity education that teaches people how to recognize and avoid common risks. CyberGuard addresses this gap by using a quiz based game with real situations users may encounter, making cybersecurity education accessible, interactive, and memorable.
 
-Currently, two official plugins are available:
+# Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+CyberGuard is an educational web application designed to educate users on how to identify common cyber threats through interactive, real world, scenario based quizzes. The platform blends cybersecurity learning with gamification while showcasing secure fullstack development, security topics, AWS deployment practices, and collaborative Agile workflows.
 
-## React Compiler
+Users take a short quiz featuring scenarios involving phishing, scams, strong passwords, secure browsing, social engineering, and more. Feedback helps users learn correct cybersafe responses. The app includes:
+- Simple, scenario based cybersecurity quiz
+- Basic user authentication (login/signup) with role distinction (User/Admin)
+- Score tracking with straightforward feedback
+- Admin page to view metrics
+- AI-driven question generation or adaptive learning system
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+[Live Demo]()
 
-## Expanding the ESLint configuration
+# Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Frontend: React (Vite)
+Backend: Node.js, Express.js
+Database: ...
+Deployment: AWS Amplify
+
+# Team
+
+Cyber Lead - Ismael Salinas 
+Project Lead - Jane Le
+Frontend Lead - Helena Lian
+Backend Lead - Michael Howey
+Test Lead - H'Thanh Nay
+
+# License
