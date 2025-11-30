@@ -19,7 +19,7 @@ export default function Header() {
                 </li>
 
                 <li>
-                    <Link to="/login">Log In</Link>
+                    <Link to="/login">Login</Link>
                 </li>
             </ul>
         </header>
