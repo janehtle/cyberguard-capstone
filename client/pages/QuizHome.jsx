@@ -1,31 +1,13 @@
-import { useState, useEffect } from 'react';
-import QuizHTML from '../components/QuizHTML';
+import Brain from "../assets/brain-removebg.png";
+import "../styles/quizhome.css";
 
 export default function QuizHome() {
-	const [questions, setQuestions] = useState([]);
-	const [loading, setLoading] = useState(true);
+    return (
+        <main>
+            <img src={Brain} className="brainImg" alt="brain image" />
 
-	useEffect(() => {
-		async function fetchQuestions() {
-			try {
-				const response = await fetch('http://localhost:3000/api/response', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-				});
-				const data = await response.json();
-				setQuestions(data.listOfQuestions);
-				setLoading(false);
-			} catch (err) {
-				console.log('Error fetching questions:', err);
-				setLoading(false);
-			}
-		}
-
-		fetchQuestions();
-	}, []);
-
-	if (loading) return <p>Loading questions...</p>;
-	if (questions.length === 0) return <p>No questions available.</p>;
-
-	return <QuizHTML questions={questions} />;
-}
+            <h2 className="mainText">Test your Cybersecurity knowledge with real-world scenarios and principles!</h2>
+            <button className="startBtn">Start Quiz</button>
+        </main>
+    )
+} 
