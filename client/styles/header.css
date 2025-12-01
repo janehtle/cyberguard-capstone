@@ -8,9 +8,9 @@ header {
     margin: 0 auto;
 }
 
-.placeholder {
-    width: 56px;
-    height: 56px;
+.logo {
+    width: 175px;
+    height: 100px;
     object-fit: cover;
 }
 
