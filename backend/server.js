@@ -2,12 +2,18 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
 import OpenAI from 'openai';
+
+import authRoutes from "./routes/auth.js";
+import quizRoutes from "./routes/quiz.js";
+import adminRoutes from "./routes/admin.js";
+
 dotenv.config();
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// OpenAI Quiz Generator
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_APIKEY,
 });
@@ -52,6 +58,11 @@ app.post('/api/response', async (req, res) => {
 		console.log(`Error ${err}`);
 	}
 });
+
+// Database Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/quiz", quizRoutes);
+app.use("/api/admin", adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server running on port http://localhost:${PORT}/api/response`));
