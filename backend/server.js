@@ -10,9 +10,14 @@ import adminRoutes from "./routes/admin.js";
 dotenv.config();
 const app = express();
 
+dotenv.config();
+
 app.use(cors());
 app.use(express.json());
 
+import OpenAI from 'openai';
+
+const client = new OpenAI({
 // OpenAI Quiz Generator
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_APIKEY,
@@ -32,7 +37,7 @@ app.post('/api/response', async (req, res) => {
     No explanations. No extra text.
     `;
 	try {
-		const response = await openai.responses.create({
+		const response = await client.responses.create({
 			model: 'gpt-4o-mini',
 			text: {
 				format: {
