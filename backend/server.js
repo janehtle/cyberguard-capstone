@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
 import OpenAI from 'openai';
-
 dotenv.config();
 const app = express();
 
@@ -13,9 +12,6 @@ const openai = new OpenAI({
 	apiKey: process.env.OPENAI_APIKEY,
 });
 
-app.get('/', async (req, res) => {
-	res.send('hi');
-});
 app.post('/api/response', async (req, res) => {
 	let theme = 'social engineering';
 	let numOfQuestions = 3;
