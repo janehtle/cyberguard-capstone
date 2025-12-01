@@ -1,14 +1,16 @@
 import dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
-import OpenAI from 'openai';
-dotenv.config();
 const app = express();
+
+dotenv.config();
 
 app.use(cors());
 app.use(express.json());
 
-const openai = new OpenAI({
+import OpenAI from 'openai';
+
+const client = new OpenAI({
 	apiKey: process.env.OPENAI_APIKEY,
 });
 
@@ -26,7 +28,7 @@ app.post('/api/response', async (req, res) => {
     No explanations. No extra text.
     `;
 	try {
-		const response = await openai.responses.create({
+		const response = await client.responses.create({
 			model: 'gpt-4o-mini',
 			text: {
 				format: {
