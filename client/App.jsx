@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Quiz from "./pages/QuizHome";
+import Homepage from "./pages/Homepage";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -12,14 +13,15 @@ function App() {
     <BrowserRouter>
       <Layout>
         <Routes>
+          <Route path="/" element={<Homepage />} />
           <Route path="/quizhome" element={<Quiz />} />
         </Routes>
       </Layout>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
 
 // import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
