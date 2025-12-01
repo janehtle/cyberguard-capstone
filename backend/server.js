@@ -24,7 +24,9 @@ const openai = new OpenAI({
 });
 
 app.post('/api/response', async (req, res) => {
-	let theme = 'social engineering';
+	// let theme = req.body;
+
+	let theme = 'Socail Engineering';
 	let numOfQuestions = 3;
 	const systemPrompt = `
     Generate exactly ${numOfQuestions} of cybersecurity questions about "${theme}". 
