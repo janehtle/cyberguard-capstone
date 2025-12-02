@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import QuizButton from './QuizButton';
 import QuizData from './QuizData';
+import "../styles/quizchoice.css";
+
 export default function QuizChoiceSelect() {
 	const [quizChoice, selectQuizChoice] = useState('');
 	const [submit, submitted] = useState(false);
@@ -44,10 +46,10 @@ export default function QuizChoiceSelect() {
 			<>
 				<h2>Select a quiz choice</h2>
 				{quizTopics.map((choice) => (
-					<QuizButton key={choice} value={choice} onClick={handleClick} />
+					<QuizButton key={choice} value={choice} onClick={handleClick} className="quizBtn" />
 				))}
 				<h3>Current choice is {quizChoice}</h3>
-				<button onClick={handleSubmit}>Submit</button>
+				<button onClick={handleSubmit} className='submitBtn'>Submit</button>
 			</>
 		);
 	}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { href, Link } from 'react-router-dom';
+import "../styles/quizhtml.css";
 
 export default function QuizHTML({ questions }) {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,11 +32,11 @@ export default function QuizHTML({ questions }) {
 	if (showResult) {
 		return (
 			<div>
-				<h2>Quiz Completed!</h2>
-				<p>
+				<h2 className='completion'>Quiz Completed!</h2>
+				<p className='score'>
 					Your Score: {score} / {questions.length}
 				</p>
-				<button
+				<button className='restartBtn'
 					onClick={() => {
 						setCurrentIndex(0);
 						setScore(0);
@@ -45,17 +46,18 @@ export default function QuizHTML({ questions }) {
 				>
 					Restart Quiz
 				</button>
-				<button onClick={<Route path="/quizhome" element={<Quiz />} />}>Change Topics</button>
+				{/* <button onClick={<Route path="/quizhome" element={<Quiz />} />}>Change Topics</button> */}
 			</div>
 		);
 	}
 
 	return (
-		<div style={{ marginBottom: '20px' }}>
-			<h3>
+		<div style={{ marginBottom: '20px' }} className='quizDiv'>
+			<h3 className='question'>
 				Question {currentIndex + 1}: {currentQuestion.question}
 			</h3>
-			<ul style={{ listStyle: 'none', padding: 0 }}>
+
+			<ul style={{ listStyle: 'none', padding: 0 }} className='answers'>
 				{currentQuestion.options.map((option, i) => (
 					<li
 						key={i}
@@ -65,6 +67,7 @@ export default function QuizHTML({ questions }) {
 								selectedOption === i ? (i === currentQuestion.correctAnswer ? 'lightgreen' : 'salmon') : '#f0f0f0',
 							cursor: 'pointer',
 						}}
+						className='answer'
 					>
 						{option}
 					</li>
