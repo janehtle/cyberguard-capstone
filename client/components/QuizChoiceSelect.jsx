@@ -16,13 +16,13 @@ export default function QuizChoiceSelect() {
 		'Device and personal data protection',
 	];
 
-	//Can add num of questions as a addition option
+	// Can add num of questions as a addition option
 
-	//Changes the state of the choice of the quiz
+	// Changes the state of the choice of the quiz
 	function handleClick(value) {
 		selectQuizChoice(value);
 	}
-	//sends data to the backend
+	// Sends data to the backend
 	async function handleSubmit() {
 		try {
 			const response = await fetch('http://localhost:5000/api/response', {
@@ -54,7 +54,7 @@ export default function QuizChoiceSelect() {
 	}
 
 	if (submit === true) {
-		return <QuizData />;
+		return <QuizData theme={quizChoice} />;
 	} else {
 		return (
 			<>

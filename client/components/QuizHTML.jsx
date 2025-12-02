@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import '../styles/quizhtml.css';
 
-export default function QuizHTML({ questions }) {
+export default function QuizHTML({ questions, theme }) {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [userScore, setScore] = useState(0);
 	const [selectedOption, setSelectedOption] = useState(null);
@@ -12,13 +12,14 @@ export default function QuizHTML({ questions }) {
 	async function PushData() {
 		try {
 			const payload = {
+				theme,
 				score: userScore,
 				correct_answers: userScore,
 				incorrect_answers: questions.length - userScore,
 				answers: [],
 			};
 
-			// attach token if available (backend requires auth for /api/quiz routes)
+			// Attach token if available (backend requires auth for /api/quiz routes)
 			const token = localStorage.getItem('token');
 			const headers = { 'Content-Type': 'application/json' };
 			if (token) headers['Authorization'] = `Bearer ${token}`;
