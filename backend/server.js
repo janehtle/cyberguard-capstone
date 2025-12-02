@@ -6,6 +6,10 @@ import OpenAI from 'openai';
 import authRoutes from './routes/auth.js';
 import quizRoutes from './routes/quiz.js';
 import adminRoutes from './routes/admin.js';
+import questionRoutes from './routes/questions.js';
+
+import authMiddleware from './middleware/authMiddleware.js';
+import adminMiddleware from './middleware/adminMiddleware.js';
 
 import pool from "./db.js";
 
@@ -78,6 +82,7 @@ app.post('/api/response', async (req, res) => {
 
 // Database Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/questions', authMiddleware, questionRoutes);
 app.use('/api/quiz', authMiddleware, quizRoutes);
 app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 
