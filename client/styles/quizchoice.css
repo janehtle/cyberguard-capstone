@@ -1,0 +1,75 @@
+h2 {
+    text-align: center;
+    font-size: 1.75rem;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.quizBtn {
+    width: calc(100% - 2rem);
+    max-width: 520px;
+    display: block;
+    margin: 0.5rem auto;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: left;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+/* hover/focus states for accessibility apparently (?) - need to look into that more */
+.quizBtn:hover, .quizBtn:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(17,24,39,0.06);
+    border-color: rgba(0,0,0,0.12);
+    outline: none;
+}
+
+.quizBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(17,24,39,0.06);
+    background-color: #fafafa;
+}
+
+.quizBtn.selected {
+    border-color: #3b82f6;
+    background: linear-gradient(180deg, rgba(59,130,246,0.06), rgba(59,130,246,0.02));
+    box-shadow: 0 8px 24px rgba(59,130,246,0.06);
+}
+
+h3 {
+    text-align: center;
+    font-size: 1.05rem;
+    margin: 1rem 0;
+    color: #374151;
+}
+
+.submitBtn {
+    display: inline-block;
+    margin: 0.75rem auto 2rem;
+    padding: 0.7rem 1.6rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    background: #d97706;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(37,99,235,0.12);
+    transition: transform 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.submitBtn:hover, .submitBtn:focus {
+    transform: translateY(-2px);
+    background-color: #b45309;
+    outline: none;
+    box-shadow: 0 10px 28px rgba(30,64,175,0.12);
+}
+
+.submitBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(30,64,175,0.10);
+}
