@@ -12,6 +12,7 @@ export default function Footer() {
                 <div className="cg-legal">
                     <a>Privacy</a>
                     <a>Terms</a>
+                    <a>Contact</a>
                 </div>
             </div>
         </footer>
