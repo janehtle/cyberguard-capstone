@@ -6,6 +6,10 @@ import OpenAI from 'openai';
 import authRoutes from './routes/auth.js';
 import quizRoutes from './routes/quiz.js';
 import adminRoutes from './routes/admin.js';
+import questionRoutes from './routes/questions.js';
+
+import authMiddleware from './middleware/authMiddleware.js';
+import adminMiddleware from './middleware/adminMiddleware.js';
 
 import pool from './db.js';
 
@@ -17,15 +21,15 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 
-// Test connection
-app.get('/test-db', async (req, res) => {
-	try {
-		const [rows] = await pool.query('SELECT NOW() AS time');
-		res.json({ connected: true, time: rows[0].time });
-	} catch (err) {
-		console.log(err);
-		res.status(500).json({ connected: false, error: err.message });
-	}
+// Database Test Connection
+app.get("/test-db", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT NOW() AS time");
+    res.json({ connected: true, time: rows[0].time });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ connected: false, error: err.message });
+  }
 });
 
 const client = new OpenAI({
@@ -78,8 +82,9 @@ app.post('/api/response', async (req, res) => {
 
 // Database Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/quiz', quizRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/questions', authMiddleware, questionRoutes);
+app.use('/api/quiz', authMiddleware, quizRoutes);
+app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server running on port http://localhost:${PORT}/api/response`));
