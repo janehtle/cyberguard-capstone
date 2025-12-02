@@ -5,7 +5,7 @@ import pool from "../db.js";
 
 const router = express.Router();
 
-// Regrister
+// Register
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// LOGIN
+// Login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
