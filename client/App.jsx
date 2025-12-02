@@ -4,9 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Quiz from "./pages/QuizHome";
 import Homepage from "./pages/Homepage";
-
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup"; // <-- IMPORT SIGNUP PAGE
 
 function App() {
   return (
@@ -15,6 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/quizhome" element={<Quiz />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Layout>
     </BrowserRouter>
