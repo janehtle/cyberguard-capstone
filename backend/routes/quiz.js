@@ -5,7 +5,7 @@ import pool from "../db.js";
 
 const router = express.Router();
 
-router.post("/save", async (req, res) => {
+router.post("/submit", async (req, res) => {
   const { user_id, score, correct_answers, incorrect_answers, answers } = req.body;
 
   try {
