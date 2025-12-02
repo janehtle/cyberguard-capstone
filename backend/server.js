@@ -7,7 +7,7 @@ import authRoutes from './routes/auth.js';
 import quizRoutes from './routes/quiz.js';
 import adminRoutes from './routes/admin.js';
 
-import pool from "./db.js";
+import pool from './db.js';
 
 dotenv.config();
 const app = express();
@@ -18,14 +18,14 @@ app.use(cors());
 app.use(express.json());
 
 // Test connection
-app.get("/test-db", async (req, res) => {
-  try {
-    const [rows] = await pool.query("SELECT NOW() AS time");
-    res.json({ connected: true, time: rows[0].time });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ connected: false, error: err.message });
-  }
+app.get('/test-db', async (req, res) => {
+	try {
+		const [rows] = await pool.query('SELECT NOW() AS time');
+		res.json({ connected: true, time: rows[0].time });
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ connected: false, error: err.message });
+	}
 });
 
 const client = new OpenAI({
@@ -34,8 +34,8 @@ const client = new OpenAI({
 });
 
 app.post('/api/response', async (req, res) => {
-	let theme = req.body;
-
+	let { theme, score } = req.body;
+	console.log(score);
 	// let theme = 'Social Engineering';
 	let numOfQuestions = 3;
 	const systemPrompt = `
