@@ -7,33 +7,53 @@ export default function QuizHTML({ questions }) {
 	const [selectedOption, setSelectedOption] = useState(null);
 	const [showResult, setShowResult] = useState(false);
 
-	const currentQuestion = questions[currentIndex];
+	const currentQuestion = questions?.[currentIndex] || {};
 
 	async function PushData() {
 		try {
-			const response = await fetch('http://localhost:5000/api/quiz', {
+			const payload = {
+				score: userScore,
+				correct_answers: userScore,
+				incorrect_answers: questions.length - userScore,
+				answers: [],
+			};
+
+			// attach token if available (backend requires auth for /api/quiz routes)
+			const token = localStorage.getItem('token');
+			const headers = { 'Content-Type': 'application/json' };
+			if (token) headers['Authorization'] = `Bearer ${token}`;
+
+			const response = await fetch('http://localhost:5000/api/quiz/submit', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ score: userScore }),
+				headers,
+				body: JSON.stringify(payload),
 			});
+
+			if (!response.ok) {
+				const text = await response.text();
+				console.error('Failed to push quiz data:', response.status, text);
+				return;
+			}
+
 			const result = await response.json();
-			console.log(`Pushing data ${result}`);
+			console.log('Pushing data result:', result);
 		} catch (err) {
-			console.log(`Error ${err}`);
+			console.error('PushData error:', err);
 		}
 	}
 
 	const handleOptionClick = (index) => {
 		setSelectedOption(index);
 
-		//Checks to see if the index of the option matches the currect question index
+		// Check if selected index matches correct answer
 		if (index === currentQuestion.correctAnswer) {
 			setScore((prev) => prev + 1);
 		}
+
 		// Show result briefly before moving to next
 		setTimeout(() => {
 			if (currentIndex + 1 < questions.length) {
-				setCurrentIndex(currentIndex + 1);
+				setCurrentIndex((prev) => prev + 1);
 				setSelectedOption(null);
 			} else {
 				setShowResult(true);
@@ -52,7 +72,7 @@ export default function QuizHTML({ questions }) {
 			<div>
 				<h2 className="completion">Quiz Completed!</h2>
 				<p className="score">
-					Your Score: {score} / {questions.length}
+					Your Score: {userScore} / {questions.length}
 				</p>
 				<button
 					className="restartBtn"
@@ -65,7 +85,6 @@ export default function QuizHTML({ questions }) {
 				>
 					Restart Quiz
 				</button>
-				{/* <button onClick={<Route path="/quizhome" element={<Quiz />} />}>Change Topics</button> */}
 			</div>
 		);
 	}
@@ -77,7 +96,7 @@ export default function QuizHTML({ questions }) {
 			</h3>
 
 			<ul style={{ listStyle: 'none', padding: 0 }} className="answers">
-				{currentQuestion.options.map((option, i) => (
+				{currentQuestion.options?.map((option, i) => (
 					<li
 						key={i}
 						onClick={() => handleOptionClick(i)}
