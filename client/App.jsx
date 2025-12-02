@@ -5,7 +5,7 @@ import Layout from "./components/Layout";
 import Quiz from "./pages/QuizHome";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup"; // <-- IMPORT SIGNUP PAGE
+import Signup from "./pages/Signup"; //
 
 function App() {
   return (
