@@ -12,9 +12,9 @@ router.post("/submit", async (req, res) => {
   try {
     await pool.query(
       `INSERT INTO quiz_results 
-      (user_id, score, correct_answers, incorrect_answers, answers)
-      VALUES (?, ?, ?, ?, ?)`,
-      [user_id, theme, score, correct_answers, incorrect_answers, JSON.stringify(answers)]
+      (user_id, theme, score, correct_answers, incorrect_answers, answers)
+      VALUES (?, ?, ?, ?, ?, ?)`,
+      [userId, theme, score, correct_answers, incorrect_answers, JSON.stringify(answers)]
     );
 
     res.json({ msg: "Quiz saved!" });
