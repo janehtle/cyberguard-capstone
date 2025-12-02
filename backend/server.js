@@ -7,6 +7,8 @@ import authRoutes from './routes/auth.js';
 import quizRoutes from './routes/quiz.js';
 import adminRoutes from './routes/admin.js';
 
+import pool from "./db.js";
+
 dotenv.config();
 const app = express();
 
@@ -14,6 +16,18 @@ dotenv.config();
 
 app.use(cors());
 app.use(express.json());
+
+// Test connection
+app.get("/test-db", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT NOW() AS time");
+    res.json({ connected: true, time: rows[0].time });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ connected: false, error: err.message });
+  }
+});
+
 const client = new OpenAI({
 	// OpenAI Quiz Generator
 	apiKey: process.env.OPENAI_APIKEY,
@@ -22,7 +36,7 @@ const client = new OpenAI({
 app.post('/api/response', async (req, res) => {
 	let theme = req.body;
 
-	// let theme = 'Socail Engineering';
+	// let theme = 'Social Engineering';
 	let numOfQuestions = 3;
 	const systemPrompt = `
     Generate exactly ${numOfQuestions} of cybersecurity questions about "${theme}". 
