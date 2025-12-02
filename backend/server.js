@@ -22,14 +22,14 @@ app.use(cors());
 app.use(express.json());
 
 // Database Test Connection
-app.get("/test-db", async (req, res) => {
-  try {
-    const [rows] = await pool.query("SELECT NOW() AS time");
-    res.json({ connected: true, time: rows[0].time });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ connected: false, error: err.message });
-  }
+app.get('/test-db', async (req, res) => {
+	try {
+		const [rows] = await pool.query('SELECT NOW() AS time');
+		res.json({ connected: true, time: rows[0].time });
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ connected: false, error: err.message });
+	}
 });
 
 const client = new OpenAI({
@@ -85,6 +85,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/questions', authMiddleware, questionRoutes);
 app.use('/api/quiz', authMiddleware, quizRoutes);
 app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
+
+app.use(express.static(path.join(__dirname, '/dist')));
+
+app.get(/^\/(?!api).*/, (req, res) => {
+	res.sendFile(path.join(__dirname, '/dist/index.html'));
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server running on port http://localhost:${PORT}/api/response`));
