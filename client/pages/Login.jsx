@@ -12,8 +12,29 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login attempt:", formData);
-    navigate("/"); // Replace with your login logic
+    // POST to backend to login
+    fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: formData.email, password: formData.password }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.msg || data.error || "Login failed");
+        // store token and user
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+        if (data.user) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
+        navigate("/");
+      })
+      .catch((err) => {
+        console.error("Login error:", err);
+        // Show brief error to user
+        alert(err.message || "Login failed");
+      });
   };
 
   return (

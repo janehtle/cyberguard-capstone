@@ -56,8 +56,25 @@ export default function Signup() {
 
     if (!validateForm()) return;
 
-    console.log("Signup successful:", formData);
-    navigate("/login"); // Redirect after signup
+    // Build username from first and last name
+    const username = `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim();
+
+    // POST to backend to register user
+    fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email: formData.email, password: formData.password }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.msg || data.error || "Registration failed");
+        // success
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.error("Signup error:", err);
+        setErrors((prev) => ({ ...prev, submit: err.message }));
+      });
   };
 
   return (

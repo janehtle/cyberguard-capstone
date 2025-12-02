@@ -8,7 +8,7 @@ export default function QuizData() {
 	useEffect(() => {
 		async function fetchQuestions() {
 			try {
-				const response = await fetch('http://localhost:3000/api/response', {
+				const response = await fetch('http://localhost:5000/api/response', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 				});
