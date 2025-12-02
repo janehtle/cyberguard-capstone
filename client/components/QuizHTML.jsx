@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { href, Link } from 'react-router-dom';
 
 export default function QuizHTML({ questions }) {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -34,6 +35,17 @@ export default function QuizHTML({ questions }) {
 				<p>
 					Your Score: {score} / {questions.length}
 				</p>
+				<button
+					onClick={() => {
+						setCurrentIndex(0);
+						setScore(0);
+						setSelectedOption(null);
+						setShowResult(false);
+					}}
+				>
+					Restart Quiz
+				</button>
+				<button onClick={<Route path="/quizhome" element={<Quiz />} />}>Change Topics</button>
 			</div>
 		);
 	}

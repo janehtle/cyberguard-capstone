@@ -23,7 +23,7 @@ export default function QuizChoiceSelect() {
 	//sends data to the backend
 	async function handleSubmit() {
 		try {
-			const response = fetch('http://localhost:3000/api/response', {
+			const response = await fetch('http://localhost:3000/api/response', {
 				method: 'Post',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ theme: quizChoice }),
@@ -39,17 +39,16 @@ export default function QuizChoiceSelect() {
 
 	if (submit === true) {
 		return <QuizData />;
+	} else {
+		return (
+			<>
+				<h2>Select a quiz choice</h2>
+				{quizTopics.map((choice) => (
+					<QuizButton key={choice} value={choice} onClick={handleClick} />
+				))}
+				<h3>Current choice is {quizChoice}</h3>
+				<button onClick={handleSubmit}>Submit</button>
+			</>
+		);
 	}
-
-	return (
-		<>
-			{console.log('pie')}
-			<h2>Select a quiz choice</h2>
-			{quizTopics.map((choice) => (
-				<QuizButton key={choice} value={choice} onClick={handleClick} />
-			))}
-			<h3>Current choice is {quizChoice}</h3>
-			<button onClick={handleSubmit}>Submit</button>
-		</>
-	);
 }
