@@ -17,7 +17,7 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 
-// Test connection
+// Database Test Connection
 app.get("/test-db", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT NOW() AS time");
@@ -78,8 +78,8 @@ app.post('/api/response', async (req, res) => {
 
 // Database Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/quiz', quizRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/quiz', authMiddleware, quizRoutes);
+app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server running on port http://localhost:${PORT}/api/response`));
