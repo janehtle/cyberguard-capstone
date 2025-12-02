@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import QuizButton from './QuizButton';
 import QuizData from './QuizData';
-import "../styles/quizchoice.css";
+import '../styles/quizchoice.css';
 
 export default function QuizChoiceSelect() {
 	const [quizChoice, selectQuizChoice] = useState('');
@@ -37,6 +37,20 @@ export default function QuizChoiceSelect() {
 		} catch (err) {
 			console.log(`Error ${err}`);
 		}
+
+		try {
+			const response = await fetch('http://localhost:5000/api/response', {
+				method: 'Post',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ theme: quizChoice }),
+			});
+			console.log(submit);
+			const result = await response.json();
+			console.log('Server response:', result);
+			submitted(true);
+		} catch (err) {
+			console.log(`Error ${err}`);
+		}
 	}
 
 	if (submit === true) {
@@ -49,7 +63,9 @@ export default function QuizChoiceSelect() {
 					<QuizButton key={choice} value={choice} onClick={handleClick} className="quizBtn" />
 				))}
 				<h3>Current choice is {quizChoice}</h3>
-				<button onClick={handleSubmit} className='submitBtn'>Submit</button>
+				<button onClick={handleSubmit} className="submitBtn">
+					Submit
+				</button>
 			</>
 		);
 	}

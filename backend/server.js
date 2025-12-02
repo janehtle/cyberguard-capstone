@@ -11,7 +11,7 @@ import questionRoutes from './routes/questions.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import adminMiddleware from './middleware/adminMiddleware.js';
 
-import pool from "./db.js";
+import pool from './db.js';
 
 dotenv.config();
 const app = express();
@@ -38,8 +38,8 @@ const client = new OpenAI({
 });
 
 app.post('/api/response', async (req, res) => {
-	let theme = req.body;
-
+	let { theme, score } = req.body;
+	console.log(score);
 	// let theme = 'Social Engineering';
 	let numOfQuestions = 3;
 	const systemPrompt = `
