@@ -2,12 +2,12 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
 import OpenAI from 'openai';
-
+import path from 'path';
 import authRoutes from './routes/auth.js';
 import quizRoutes from './routes/quiz.js';
 import adminRoutes from './routes/admin.js';
 import questionRoutes from './routes/questions.js';
-
+import { fileURLToPath } from 'url';
 import authMiddleware from './middleware/authMiddleware.js';
 import adminMiddleware from './middleware/adminMiddleware.js';
 
@@ -20,7 +20,6 @@ dotenv.config();
 
 app.use(cors());
 app.use(express.json());
-
 // Database Test Connection
 app.get('/test-db', async (req, res) => {
 	try {
@@ -86,11 +85,15 @@ app.use('/api/questions', authMiddleware, questionRoutes);
 app.use('/api/quiz', authMiddleware, quizRoutes);
 app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 
-app.use(express.static(path.join(__dirname, '/dist')));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.get(/^\/(?!api).*/, (req, res) => {
-	res.sendFile(path.join(__dirname, '/dist/index.html'));
+//---------------------SERVE REACT FILES-----------------
+// Serve static files from the dist directory
+app.use(express.static(path.join(__dirname, '..', 'dist')));
+// Catch-all route to serve the React app for client-side routing
+app.get('/*dt', (req, res) => {
+	res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server running on port http://localhost:${PORT}/api/response`));
