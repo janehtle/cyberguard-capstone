@@ -6,18 +6,20 @@ import pool from "../db.js";
 const router = express.Router();
 
 router.post("/submit", async (req, res) => {
-  const { user_id, score, correct_answers, incorrect_answers, answers } = req.body;
+  const userId = req.user.id;  // from middleware
+  const { theme, score, correct_answers, incorrect_answers, answers } = req.body;
 
   try {
     await pool.query(
       `INSERT INTO quiz_results 
       (user_id, score, correct_answers, incorrect_answers, answers)
       VALUES (?, ?, ?, ?, ?)`,
-      [user_id, score, correct_answers, incorrect_answers, JSON.stringify(answers)]
+      [user_id, theme, score, correct_answers, incorrect_answers, JSON.stringify(answers)]
     );
 
     res.json({ msg: "Quiz saved!" });
   } catch (err) {
+    console.error("Quiz Save Error:", err);
     res.status(500).json({ error: err.message });
   }
 });
