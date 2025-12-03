@@ -13,7 +13,7 @@ Users take a short quiz featuring scenarios involving phishing, scams, strong pa
 - Admin page to view metrics
 - AI-driven question generation or adaptive learning system
 
-[Live Demo]()
+[Live Demo](https://dev.d1thswjv0p8u6t.amplifyapp.com/)
 
 # Tech Stack
 
