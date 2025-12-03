@@ -26,7 +26,7 @@ export default function QuizChoiceSelect() {
 	async function handleSubmit() {
 		try {
 			const response = await fetch('/api/response', {
-				method: 'Post',
+				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ theme: quizChoice }),
 			});
