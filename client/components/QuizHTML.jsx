@@ -24,7 +24,7 @@ export default function QuizHTML({ questions, theme }) {
 			const headers = { 'Content-Type': 'application/json' };
 			if (token) headers['Authorization'] = `Bearer ${token}`;
 
-			const response = await fetch('http://localhost:5000/api/quiz/submit', {
+			const response = await fetch('/api/quiz/submit', {
 				method: 'POST',
 				headers,
 				body: JSON.stringify(payload),
