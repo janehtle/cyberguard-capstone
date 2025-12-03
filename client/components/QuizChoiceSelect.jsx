@@ -25,7 +25,7 @@ export default function QuizChoiceSelect() {
 	// Sends data to the backend
 	async function handleSubmit() {
 		try {
-			const response = await fetch('/api/response', {
+			const response = await fetch('api/response', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ theme: quizChoice }),
@@ -35,6 +35,7 @@ export default function QuizChoiceSelect() {
 			console.log('Server response:', result);
 			submitted(true);
 		} catch (err) {
+			console.log(quizChoice);
 			console.log(`Error ${err}`);
 		}
 	}
