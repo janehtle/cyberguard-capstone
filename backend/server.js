@@ -3,6 +3,8 @@ import cors from 'cors';
 import express from 'express';
 import OpenAI from 'openai';
 import path from 'path';
+import compression from 'compression';
+import helmet from 'helmet';
 import authRoutes from './routes/auth.js';
 import quizRoutes from './routes/quiz.js';
 import adminRoutes from './routes/admin.js';
@@ -18,7 +20,17 @@ const app = express();
 
 dotenv.config();
 
-app.use(cors());
+// Security + performance
+app.use(helmet());
+app.use(compression());
+
+// CORS - restrict in production via CLIENT_ORIGIN env
+if (process.env.NODE_ENV === 'production' && process.env.CLIENT_ORIGIN) {
+	app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
+} else {
+	app.use(cors());
+}
+
 app.use(express.json());
 // Database Test Connection
 app.get('/test-db', async (req, res) => {
@@ -89,11 +101,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 //---------------------SERVE REACT FILES-----------------
-// Serve static files from the dist directory
-app.use(express.static(path.join(__dirname, '..', 'dist')));
-// Catch-all route to serve the React app for client-side routing
-app.get('/*dt', (req, res) => {
-	res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+// Serve static files from the dist directory (project root /dist)
+const staticDir = path.join(__dirname, '..', 'dist');
+
+// In production, allow caching for assets; keep index.html un-cached via the fallback route
+app.use(express.static(staticDir, { maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0 }));
+
+// SPA fallback — serve index.html for all non-API routes. Prevent caching index.html.
+app.get(/^\/(?!api).*/, (req, res) => {
+	res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+	res.sendFile(path.join(staticDir, 'index.html'));
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server running on port http://localhost:${PORT}/api/response`));
