@@ -21,7 +21,7 @@ Users take a short quiz featuring scenarios involving phishing, scams, strong pa
 
 **Backend:** Node.js, Express.js
 
-**Database:** ...
+**Database:** MySQL Workbench + AWS RDS
 
 **Deployment:** AWS Amplify
 
