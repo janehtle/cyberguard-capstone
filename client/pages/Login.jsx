@@ -21,7 +21,7 @@ export default function Login() {
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.msg || data.error || "Login failed");
-        // store token and user
+        // Store token and user
         if (data.token) {
           localStorage.setItem("token", data.token);
         }
