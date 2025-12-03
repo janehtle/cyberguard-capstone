@@ -22,45 +22,21 @@ export default function QuizChoiceSelect() {
 	function handleClick(value) {
 		selectQuizChoice(value);
 	}
-
-	//Option one
 	// Sends data to the backend
-	// async function handleSubmit() {
-	// 	try {
-	// 		const response = await fetch('api/response', {
-	// 			method: 'POST',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ theme: quizChoice }),
-	// 		});
-	// 		console.log(submit);
-	// 		const result = await response.json();
-	// 		console.log('Server response:', result);
-	// 		submitted(true);
-	// 	} catch (err) {
-	// 		console.log(quizChoice);
-	// 		console.log(`Error ${err}`);
-	// 	}
-	// }
-
 	async function handleSubmit() {
 		try {
-			const response = await fetch('/api/response', {
+			const response = await fetch('api/response', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ theme: quizChoice }),
 			});
-
-			if (!response.ok) {
-				const text = await response.text();
-				console.error('Server error:', response.status, text);
-				return;
-			}
-
+			console.log(submit);
 			const result = await response.json();
 			console.log('Server response:', result);
 			submitted(true);
 		} catch (err) {
-			console.log('Error', err);
+			console.log(quizChoice);
+			console.log(`Error ${err}`);
 		}
 	}
 
