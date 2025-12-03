@@ -36,7 +36,7 @@ const client = new OpenAI({
 	apiKey: process.env.OPENAI_APIKEY,
 });
 
-app.post('api/response', async (req, res) => {
+app.post('/api/response', async (req, res) => {
 	let { theme, score } = req.body;
 	console.log(score);
 	// let theme = 'Social Engineering';
@@ -96,4 +96,4 @@ app.get('/*dt', (req, res) => {
 	res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server running on port http://localhost:${PORT}/api/response`));
+app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server is running`));
