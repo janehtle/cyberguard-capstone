@@ -60,7 +60,7 @@ export default function Signup() {
     const username = `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim();
 
     // POST to backend to register user
-    fetch("http://localhost:5000/api/auth/register", {
+    fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email: formData.email, password: formData.password }),
