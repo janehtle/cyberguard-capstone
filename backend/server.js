@@ -18,10 +18,7 @@ dotenv.config();
 const app = express();
 
 // ------------------ CORS ------------------
-const allowedOrigins = [
-	'http://localhost:5173', // local dev
-	'https://dev.d1thswjv0p8u6t.amplifyapp.com', // Amplify prod
-];
+const allowedOrigins = ['http://localhost:5173', 'https://dev.d1thswjv0p8u6t.amplifyapp.com'];
 
 app.use(
 	cors({
@@ -33,7 +30,7 @@ app.use(
 				callback(new Error('CORS blocked'));
 			}
 		},
-		credentials: true, // allow cookies/auth headers
+		credentials: true,
 	})
 );
 
@@ -47,7 +44,7 @@ app.use(
 		cookie: {
 			httpOnly: true,
 			sameSite: 'lax',
-			secure: process.env.NODE_ENV === 'production', // secure cookies in prod
+			secure: process.env.NODE_ENV === 'production',
 			maxAge: 1000 * 60 * 60 * 24,
 		},
 	})
@@ -113,13 +110,14 @@ app.use('/api/quiz', authMiddleware, quizRoutes);
 app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 
 // ------------------ Serve React ------------------
+// Serve static files from root dist folder
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, 'dist')));
 
-app.use(express.static(path.join(__dirname, '..', 'dist')));
-
-app.get('/*', (req, res) => {
-	res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+// SPA fallback — MUST come after API routes
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 // ------------------ Start Server ------------------
