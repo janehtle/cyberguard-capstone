@@ -23,9 +23,16 @@ export default function Homepage() {
             </h1>
 
             <p className="content-text">
-              Over 90% of cyber-attacks start with phishing emails. 60% of small
-              businesses go out of business within 6 months of a cyberattack.
-              Only 30% of users feel confident spotting cyber threats.
+              CyberGuard Challenge is designed for everyday technology
+              users—students, families, professionals, and anyone who spends
+              time online. Our interactive game teaches the most common
+              cybersecurity awareness topics through simple, real-world
+              scenarios. From spotting phishing attempts and social engineering
+              tricks to creating stronger passwords, browsing safely,
+              recognizing scams, protecting your devices, and staying safe on
+              social media or gaming platforms, CyberGuard Challenge helps users
+              build practical digital safety skills in a fast, engaging, and
+              easy-to-understand way.
             </p>
 
             <p className="content-text">

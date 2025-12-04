@@ -1,88 +1,89 @@
 footer {
-    padding: 28px 20px;
-    box-sizing: border-box;
-    font-size: 14px;
+  padding: 28px 20px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 .cg-footer-bottom {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding-top: 12px;
-    padding-bottom: 2px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-top: 12px;
+  padding-bottom: 2px;
 }
 
 .cg-divider {
-    height: 1px;
-    background: black;
-    width: 100%;
-    margin: 0 auto;
-    max-width: 1100px;
-    border-radius: 1px;
+  height: 1px;
+  background: black;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1100px;
+  border-radius: 1px;
 }
 
 .cg-copy {
-    margin: 0;
-    /* color: #bfc3c6; */
-    font-size: 14px;
-    line-height: 1.4;
-    /* font-weight: 500; */
+  margin: 0;
+  /* color: #bfc3c6; */
+  font-size: 14px;
+  line-height: 1.4;
+  /* font-weight: 500; */
 }
 
 .cg-copy span[aria-hidden="true"] {
-    margin: 0 6px;
-    color: #ff6b81; 
+  margin: 0 6px;
+  color: #ff6b81;
 }
 
 .cg-legal {
-    display: flex;
-    gap: 18px;
-    align-items: center;
-    flex-shrink: 0;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .cg-legal a {
-    /* color: #d6d8da; */
-    text-decoration: none;
-    /* font-weight: 600; */
-    padding: 6px 8px;
-    border-radius: 6px;
-    transition: background-color 150ms ease, transform 120ms ease, color 150ms ease;
-    cursor: pointer;
+  /* color: #d6d8da; */
+  text-decoration: none;
+  /* font-weight: 600; */
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background-color 150ms ease, transform 120ms ease,
+    color 150ms ease;
+  cursor: pointer;
 }
 
 .cg-legal a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* ---- media queries ---- */
 @media (max-width: 720px) {
-    footer {
-        padding: 20px 14px;
-    }
+  footer {
+    padding: 20px 14px;
+  }
 
-    .cg-footer-bottom {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        padding-top: 10px;
-    }
+  .cg-footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-top: 10px;
+  }
 
-    .cg-copy {
-        font-size: 15px;
-    }
+  .cg-copy {
+    font-size: 15px;
+  }
 
-    .cg-legal {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 12px;
-    }
+  .cg-legal {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 12px;
+  }
 
-    .cg-legal a {
-        padding: 8px 10px;
-        font-size: 15px;
-    }
+  .cg-legal a {
+    padding: 8px 10px;
+    font-size: 15px;
+  }
 }

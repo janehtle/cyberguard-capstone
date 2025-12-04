@@ -5,7 +5,9 @@ import Layout from "./components/Layout";
 import Quiz from "./pages/QuizHome";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup"; //
+import Signup from "./pages/Signup";
+import Admin from "./pages/Admin";
+git;
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
           <Route path="/quizhome" element={<Quiz />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/admin" element={<Admin />} /> {/* ✅ fixed route */}
         </Routes>
       </Layout>
     </BrowserRouter>
