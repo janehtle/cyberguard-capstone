@@ -4,13 +4,17 @@ import QuizHTML from '../components/QuizHTML';
 export default function QuizData({ theme }) {
 	const [questions, setQuestions] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState('');
 
 	const API_URL = import.meta.env.VITE_API_URL;
 
 	useEffect(() => {
 		if (!theme) return;
 
-		async function fetchQuestions() {
+		const fetchQuestions = async () => {
+			setLoading(true);
+			setError('');
+
 			try {
 				const response = await fetch(`${API_URL}/api/response`, {
 					method: 'POST',
@@ -27,15 +31,17 @@ export default function QuizData({ theme }) {
 				setQuestions(data.listOfQuestions || []);
 			} catch (err) {
 				console.error('Error fetching questions:', err);
+				setError('Failed to load questions. Please try again later.');
 			} finally {
 				setLoading(false);
 			}
-		}
+		};
 
 		fetchQuestions();
 	}, [theme, API_URL]);
 
 	if (loading) return <p>Loading questions...</p>;
+	if (error) return <p>{error}</p>;
 	if (questions.length === 0) return <p>No questions available for this topic.</p>;
 
 	return <QuizHTML questions={questions} theme={theme} />;
