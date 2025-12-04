@@ -1,7 +1,7 @@
 import "../styles/user.css";
 import React from "react";
 
-export default function User({ firstName, quizHistory }) {
+export default function User({ username, quizHistory }) {
     return (
         <div className="dashboard-container">
             <h1 className="dashboard-greeting">Welcome back, {username}!</h1>
