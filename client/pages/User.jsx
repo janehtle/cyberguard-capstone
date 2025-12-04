@@ -4,7 +4,7 @@ import React from "react";
 export default function User({ firstName, quizHistory }) {
     return (
         <div className="dashboard-container">
-            <h1 className="dashboard-greeting">Welcome back, {firstName}!</h1>
+            <h1 className="dashboard-greeting">Welcome back, {username}!</h1>
 
             <div className="dashboard-table-wrapper">
                 <table className="dashboard-table">
