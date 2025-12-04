@@ -8,7 +8,8 @@ export default function QuizHTML({ questions, theme }) {
 	const [showResult, setShowResult] = useState(false);
 
 	const currentQuestion = questions?.[currentIndex] || {};
-	const API_URL = import.meta.env.VITE_API_URL;
+	// If VITE_API_URL is not provided (monorepo), use same-origin
+	const API_URL = import.meta.env.VITE_API_URL || '';
 
 	const PushData = async () => {
 		try {

@@ -6,7 +6,8 @@ export default function QuizData({ theme }) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 
-	const API_URL = import.meta.env.VITE_API_URL;
+	// If VITE_API_URL is not set (monorepo / single-server), default to same-origin
+	const API_URL = import.meta.env.VITE_API_URL || '';
 
 	useEffect(() => {
 		if (!theme) return;

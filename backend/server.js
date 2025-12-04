@@ -110,14 +110,16 @@ app.use('/api/quiz', authMiddleware, quizRoutes);
 app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 
 // ------------------ Serve React ------------------
-// Serve static files from root dist folder
+// Serve static files from repo-level dist (monorepo: client build -> /dist at repo root)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, 'dist')));
+const staticDir = path.join(__dirname, '..', 'dist');
 
-// SPA fallback — MUST come after API routes
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+app.use(express.static(staticDir));
+
+// SPA fallback — MUST come after API routes. Exclude /api so API routes are not hijacked.
+app.get(/^\/(?!api).*/, (req, res) => {
+	res.sendFile(path.join(staticDir, 'index.html'));
 });
 
 // ------------------ Start Server ------------------
