@@ -17,17 +17,17 @@ export default function QuizChoiceSelect() {
 		'Device and personal data protection',
 	];
 
-	function handleClick(value) {
+	const handleClick = (value) => {
 		setQuizChoice(value);
-	}
+	};
 
-	function handleSubmit() {
+	const handleSubmit = () => {
 		if (!quizChoice) {
 			alert('Please select a quiz topic!');
 			return;
 		}
 		setSubmitted(true);
-	}
+	};
 
 	if (submitted) {
 		return <QuizData theme={quizChoice} />;
@@ -35,7 +35,7 @@ export default function QuizChoiceSelect() {
 
 	return (
 		<div>
-			<h2>Select a quiz choice</h2>
+			<h2>Select a quiz topic</h2>
 			{quizTopics.map((choice) => (
 				<QuizButton key={choice} value={choice} onClick={handleClick} className="quizBtn" />
 			))}

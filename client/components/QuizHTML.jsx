@@ -10,7 +10,7 @@ export default function QuizHTML({ questions, theme }) {
 	const currentQuestion = questions?.[currentIndex] || {};
 	const API_URL = import.meta.env.VITE_API_URL;
 
-	async function PushData() {
+	const PushData = async () => {
 		try {
 			const payload = {
 				theme,
@@ -41,12 +41,12 @@ export default function QuizHTML({ questions, theme }) {
 		} catch (err) {
 			console.error('PushData error:', err);
 		}
-	}
+	};
 
 	const handleOptionClick = (index) => {
-		if (selectedOption !== null) return; // disable further clicks until next
-
+		if (selectedOption !== null) return; // disable further clicks
 		setSelectedOption(index);
+
 		if (index === currentQuestion.correctAnswer) {
 			setScore((prev) => prev + 1);
 		}
@@ -57,6 +57,7 @@ export default function QuizHTML({ questions, theme }) {
 			alert('Please select an answer first!');
 			return;
 		}
+
 		if (currentIndex + 1 < questions.length) {
 			setCurrentIndex((prev) => prev + 1);
 			setSelectedOption(null);
@@ -96,6 +97,7 @@ export default function QuizHTML({ questions, theme }) {
 			<h3 className="question">
 				Question {currentIndex + 1}: {currentQuestion.question}
 			</h3>
+
 			<ul className="answers" style={{ listStyle: 'none', padding: 0 }}>
 				{currentQuestion.options?.map((option, i) => (
 					<li
@@ -112,6 +114,7 @@ export default function QuizHTML({ questions, theme }) {
 					</li>
 				))}
 			</ul>
+
 			<button onClick={handleNext} className="nextBtn">
 				Next
 			</button>
