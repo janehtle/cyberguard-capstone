@@ -3,6 +3,17 @@
 import jwt from "jsonwebtoken";
 
 export default function authMiddleware(req, res, next) {
+  // Checking if user has an active session
+  if (req.session?.userId) {
+    req.user = {
+      id: req.session.userId,
+      role: req.session.role
+    };
+    return next();
+  }
+
+
+  // Else: Try JWT
   const authHeader = req.headers.authorization;
   const token = authHeader?.startsWith("Bearer ")
     ? authHeader.split(" ")[1]
