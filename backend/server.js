@@ -17,26 +17,27 @@ import pool from './db.js';
 dotenv.config();
 const app = express();
 
-app.use(cors(
-	origin: 'http://localhost:5173', //  frontend
-    credentials: true,
-  })
+app.use(
+	cors({
+		origin: 'http://localhost:5173', //  frontend
+		credentials: true,
+	})
 );
 
 app.use(express.json());
 
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'supersecretdevkey',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: false, // set TRUE only in production with HTTPS
-      maxAge: 1000 * 60 * 60 * 24,
-    },
-  })
+	session({
+		secret: process.env.SESSION_SECRET || 'supersecretdevkey',
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			httpOnly: true,
+			sameSite: 'lax',
+			secure: false, // set TRUE only in production with HTTPS
+			maxAge: 1000 * 60 * 60 * 24,
+		},
+	})
 );
 
 // Database Test Connection
