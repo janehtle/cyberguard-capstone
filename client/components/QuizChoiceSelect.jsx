@@ -25,7 +25,7 @@ export default function QuizChoiceSelect() {
 	// Sends data to the backend
 	async function handleSubmit() {
 		try {
-			const response = await fetch('api/response', {
+			const response = await fetch('https://dev.d1thswjv0p8u6t.amplifyapp.com/api/response', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ theme: quizChoice }),
