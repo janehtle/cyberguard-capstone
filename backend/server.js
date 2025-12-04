@@ -1,26 +1,26 @@
 import dotenv from 'dotenv';
-import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
-import OpenAI from 'openai';
+import cors from 'cors';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
 import authRoutes from './routes/auth.js';
 import quizRoutes from './routes/quiz.js';
 import adminRoutes from './routes/admin.js';
 import questionRoutes from './routes/questions.js';
-import { fileURLToPath } from 'url';
 import authMiddleware from './middleware/authMiddleware.js';
 import adminMiddleware from './middleware/adminMiddleware.js';
-
 import pool from './db.js';
+import OpenAI from 'openai';
 
 dotenv.config();
 const app = express();
-import cors from 'cors';
 
+// ------------------ CORS ------------------
 const allowedOrigins = [
 	'http://localhost:5173', // local dev
-	'https://dev.d1thswjv0p8u6t.amplifyapp.com', // Amplify production
+	'https://dev.d1thswjv0p8u6t.amplifyapp.com', // Amplify prod
 ];
 
 app.use(
@@ -33,12 +33,12 @@ app.use(
 				callback(new Error('CORS blocked'));
 			}
 		},
-		credentials: true,
+		credentials: true, // allow cookies/auth headers
 	})
 );
 
+// ------------------ Middleware ------------------
 app.use(express.json());
-
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET || 'supersecretdevkey',
@@ -47,13 +47,13 @@ app.use(
 		cookie: {
 			httpOnly: true,
 			sameSite: 'lax',
-			secure: false, // set TRUE only in production with HTTPS
+			secure: process.env.NODE_ENV === 'production', // secure cookies in prod
 			maxAge: 1000 * 60 * 60 * 24,
 		},
 	})
 );
 
-// Database Test Connection
+// ------------------ Database Test ------------------
 app.get('/test-db', async (req, res) => {
 	try {
 		const [rows] = await pool.query('SELECT NOW() AS time');
@@ -64,70 +64,64 @@ app.get('/test-db', async (req, res) => {
 	}
 });
 
-const client = new OpenAI({
-	// OpenAI Quiz Generator
-	apiKey: process.env.OPENAI_APIKEY,
-});
+// ------------------ OpenAI Client ------------------
+const client = new OpenAI({ apiKey: process.env.OPENAI_APIKEY });
 
+// ------------------ Quiz Generator ------------------
 app.post('/api/response', async (req, res) => {
-	let { theme, score } = req.body;
-	console.log(score);
-	// let theme = 'Social Engineering';
-	let numOfQuestions = 3;
-	const systemPrompt = `
-    Generate exactly ${numOfQuestions} of cybersecurity questions about "${theme}". 
-	Ensure that the order of the options are random and only 4 options.
-    Include at least 1 real world scenario question as part of the ${numOfQuestions}. 
-    Return the data strictly in JSON format.
+	const { theme, score } = req.body;
+	const numOfQuestions = 3;
 
-    listOfQuestions:{"question": "string","options": array,"correctAnswer": int}
-    ("correctAnswer" is the index of the correct option 0–3)
-    No explanations. No extra text.
-    `;
+	const systemPrompt = `
+    Generate exactly ${numOfQuestions} cybersecurity questions about "${theme}". 
+    Ensure options are random and only 4 per question.
+    Include at least 1 real-world scenario question.
+    Return strictly valid JSON:
+      { listOfQuestions: [{"question":"string","options":["string"],"correctAnswer":0}] }
+    No extra text or explanations.
+  `;
+
 	try {
 		const response = await client.responses.create({
 			model: 'gpt-4o-mini',
-			text: {
-				format: {
-					type: 'json_object',
-				},
-			},
+			text: { format: { type: 'json_object' } },
 			input: [{ role: 'system', content: systemPrompt }],
 			temperature: 1.3,
 			max_output_tokens: 500,
 		});
-		const outputText = response.output_text.trim();
 
-		// Attempt to parse JSON
+		const outputText = response.output_text.trim();
 		let data;
+
 		try {
 			data = JSON.parse(outputText);
 		} catch {
 			data = { raw_output: outputText };
 		}
-		console.log(data);
+
 		res.json(data);
 	} catch (err) {
-		console.log(`Error ${err}`);
+		console.error('OpenAI error:', err);
+		res.status(500).json({ error: 'Failed to generate quiz' });
 	}
 });
 
-// Database Routes
+// ------------------ API Routes ------------------
 app.use('/api/auth', authRoutes);
 app.use('/api/questions', authMiddleware, questionRoutes);
 app.use('/api/quiz', authMiddleware, quizRoutes);
 app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 
+// ------------------ Serve React ------------------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//---------------------SERVE REACT FILES-----------------
-// Serve static files from the dist directory
 app.use(express.static(path.join(__dirname, '..', 'dist')));
-// Catch-all route to serve the React app for client-side routing
-// Changed to ('/*) formerly ('/*dt)
+
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
+
+// ------------------ Start Server ------------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server is running`));
+app.listen(PORT, '0.0.0.0', () => console.log(`✅ Server running on port ${PORT}`));
