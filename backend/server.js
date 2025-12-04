@@ -16,8 +16,6 @@ import pool from './db.js';
 dotenv.config();
 const app = express();
 
-dotenv.config();
-
 app.use(cors());
 app.use(express.json());
 // Database Test Connection
@@ -36,7 +34,7 @@ const client = new OpenAI({
 	apiKey: process.env.OPENAI_APIKEY,
 });
 
-app.post('api/response', async (req, res) => {
+app.post('/api/response', async (req, res) => {
 	let { theme, score } = req.body;
 	console.log(score);
 	// let theme = 'Social Engineering';
