@@ -1,28 +1,31 @@
-import { useState } from "react";
-import "../styles/header.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Quiz from "./pages/QuizHome";
-import Homepage from "./pages/Homepage";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Admin from "./pages/Admin";
-git;
+import React from 'react';
+import '../styles/header.css';
+import Logo from '../assets/logo-removebg.png';
+import { Link } from 'react-router-dom';
 
-function App() {
-  return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/quizhome" element={<Quiz />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/admin" element={<Admin />} /> {/* ✅ fixed route */}
-        </Routes>
-      </Layout>
-    </BrowserRouter>
-  );
+export default function Header() {
+	return (
+		<header>
+			<Link to="/">
+				<img src={Logo} className="logo" alt="cyberguard logo" />
+			</Link>
+
+			<ul className="nav-links">
+				<li>
+					<Link to="/">Home</Link>
+				</li>
+
+				<li>
+					<Link to="/quizhome">Quiz</Link>
+				</li>
+
+				<li>
+					<Link to="/login">Login</Link>
+				</li>
+				<li>
+					<Link to="/admin">Admin</Link>
+				</li>
+			</ul>
+		</header>
+	);
 }
-
-export default App;
