@@ -90,7 +90,8 @@ const __dirname = path.dirname(__filename);
 // Serve static files from the dist directory
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 // Catch-all route to serve the React app for client-side routing
-app.get('/*dt', (req, res) => {
+// Changed to ('/*) formerly ('/*dt)
+app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 const PORT = process.env.PORT || 5000;
