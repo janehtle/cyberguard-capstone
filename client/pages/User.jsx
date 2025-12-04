@@ -41,7 +41,7 @@ export default function User({ firstName, quizHistory }) {
                                     </td>
 
                                     {/* topic (must come from backend join with questions.category) */}
-                                    <td>{attempt.topic}</td>
+                                    <td>{attempt.theme}</td>
                                 </tr>
                             ))
                         ) : (
