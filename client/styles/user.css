@@ -1,0 +1,102 @@
+.dashboard-container {
+    /* padding: 2.5rem; */
+    max-width: 1100px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+.dashboard-greeting {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dashboard-table-wrapper {
+    overflow-x: auto;
+    border-radius: 18px;
+    background: #ffffff;
+    padding: 1.8rem;
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.08),
+        0 6px 6px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e3e6ee;
+}
+
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    table-layout: auto;
+}
+
+.dashboard-table th {
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #f1f3f9, #e9ecf5);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-bottom: 2px solid #dcdfea;
+    text-transform: uppercase;
+}
+
+.dashboard-table td {
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    color: #333;
+    border-bottom: 1px solid #f0f0f5;
+}
+
+/* Balanced Column Width for Large Table */
+.dashboard-table th:nth-child(1), .dashboard-table td:nth-child(1) {
+    width: 90px; /* attempt # */
+}
+
+.dashboard-table th:nth-child(2), .dashboard-table td:nth-child(2) {
+    width: 90px; /* score */
+}
+
+.dashboard-table th:nth-child(3),
+.dashboard-table td:nth-child(3),
+.dashboard-table th:nth-child(4),
+.dashboard-table td:nth-child(4) {
+    width: 120px; /* correct/incorrect */
+}
+
+.dashboard-table th:nth-child(5), .dashboard-table td:nth-child(5) {
+    width: 150px; /* date */
+}
+
+.dashboard-table th:nth-child(6), .dashboard-table td:nth-child(6) {
+    width: 150px; /* topic */
+}
+
+/* Zebra Striping */
+.dashboard-table tbody tr:nth-child(odd) {
+    background: #fafbff;
+}
+
+.no-data {
+    text-align: center;
+    padding: 2rem !important;
+    font-style: italic;
+    font-size: 1rem;
+    background: #fafafa;
+}
+
+/* ---- media queries ---- */
+@media (max-width: 700px) {
+    .dashboard-greeting {
+        font-size: 1.8rem;
+    }
+
+    .dashboard-table-wrapper {
+        padding: 1.2rem;
+    }
+
+    .dashboard-table th, .dashboard-table td {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+
