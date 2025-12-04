@@ -16,10 +16,23 @@ import pool from './db.js';
 
 dotenv.config();
 const app = express();
+import cors from 'cors';
+
+const allowedOrigins = [
+	'http://localhost:5173', // local dev
+	'https://dev.d1thswjv0p8u6t.amplifyapp.com', // Amplify production
+];
 
 app.use(
 	cors({
-		origin: 'http://localhost:5173', //  frontend
+		origin: function (origin, callback) {
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				console.log('❌ Blocked by CORS:', origin);
+				callback(new Error('CORS blocked'));
+			}
+		},
 		credentials: true,
 	})
 );

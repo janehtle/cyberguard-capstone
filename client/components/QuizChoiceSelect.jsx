@@ -4,8 +4,9 @@ import QuizData from './QuizData';
 import '../styles/quizchoice.css';
 
 export default function QuizChoiceSelect() {
-	const [quizChoice, selectQuizChoice] = useState('');
-	const [submit, submitted] = useState(false);
+	const [quizChoice, setQuizChoice] = useState('');
+	const [submitted, setSubmitted] = useState(false);
+
 	const quizTopics = [
 		'Phishing and social engineering',
 		'Password security and authentication',
@@ -16,44 +17,32 @@ export default function QuizChoiceSelect() {
 		'Device and personal data protection',
 	];
 
-	// Can add num of questions as a addition option
-
-	// Changes the state of the choice of the quiz
 	function handleClick(value) {
-		selectQuizChoice(value);
-	}
-	// Sends data to the backend
-	async function handleSubmit() {
-		try {
-			const response = await fetch('https://dev.d1thswjv0p8u6t.amplifyapp.com/api/response', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ theme: quizChoice }),
-			});
-			console.log(submit);
-			const result = await response.json();
-			console.log('Server response:', result);
-			submitted(true);
-		} catch (err) {
-			console.log(quizChoice);
-			console.log(`Error ${err}`);
-		}
+		setQuizChoice(value);
 	}
 
-	if (submit === true) {
-		return <QuizData theme={quizChoice} />;
-	} else {
-		return (
-			<>
-				<h2>Select a quiz choice</h2>
-				{quizTopics.map((choice) => (
-					<QuizButton key={choice} value={choice} onClick={handleClick} className="quizBtn" />
-				))}
-				<h3>Current choice is {quizChoice}</h3>
-				<button onClick={handleSubmit} className="submitBtn">
-					Submit
-				</button>
-			</>
-		);
+	function handleSubmit() {
+		if (!quizChoice) {
+			alert('Please select a quiz topic!');
+			return;
+		}
+		setSubmitted(true);
 	}
+
+	if (submitted) {
+		return <QuizData theme={quizChoice} />;
+	}
+
+	return (
+		<div>
+			<h2>Select a quiz choice</h2>
+			{quizTopics.map((choice) => (
+				<QuizButton key={choice} value={choice} onClick={handleClick} className="quizBtn" />
+			))}
+			<h3>Current choice: {quizChoice}</h3>
+			<button onClick={handleSubmit} className="submitBtn">
+				Submit
+			</button>
+		</div>
+	);
 }

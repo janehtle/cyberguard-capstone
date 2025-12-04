@@ -8,6 +8,7 @@ export default function QuizHTML({ questions, theme }) {
 	const [showResult, setShowResult] = useState(false);
 
 	const currentQuestion = questions?.[currentIndex] || {};
+	const API_URL = import.meta.env.VITE_API_URL;
 
 	async function PushData() {
 		try {
@@ -19,12 +20,11 @@ export default function QuizHTML({ questions, theme }) {
 				answers: [],
 			};
 
-			// Attach token if available (backend requires auth for /api/quiz routes)
 			const token = localStorage.getItem('token');
 			const headers = { 'Content-Type': 'application/json' };
 			if (token) headers['Authorization'] = `Bearer ${token}`;
 
-			const response = await fetch('/api/quiz/submit', {
+			const response = await fetch(`${API_URL}/api/quiz/submit`, {
 				method: 'POST',
 				headers,
 				body: JSON.stringify(payload),
@@ -37,35 +37,36 @@ export default function QuizHTML({ questions, theme }) {
 			}
 
 			const result = await response.json();
-			console.log('Pushing data result:', result);
+			console.log('Pushed quiz data result:', result);
 		} catch (err) {
 			console.error('PushData error:', err);
 		}
 	}
 
 	const handleOptionClick = (index) => {
-		setSelectedOption(index);
+		if (selectedOption !== null) return; // disable further clicks until next
 
-		// Check if selected index matches correct answer
+		setSelectedOption(index);
 		if (index === currentQuestion.correctAnswer) {
 			setScore((prev) => prev + 1);
 		}
+	};
 
-		// Show result briefly before moving to next
-		setTimeout(() => {
-			if (currentIndex + 1 < questions.length) {
-				setCurrentIndex((prev) => prev + 1);
-				setSelectedOption(null);
-			} else {
-				setShowResult(true);
-			}
-		}, 500);
+	const handleNext = () => {
+		if (selectedOption === null) {
+			alert('Please select an answer first!');
+			return;
+		}
+		if (currentIndex + 1 < questions.length) {
+			setCurrentIndex((prev) => prev + 1);
+			setSelectedOption(null);
+		} else {
+			setShowResult(true);
+		}
 	};
 
 	useEffect(() => {
-		if (showResult) {
-			PushData();
-		}
+		if (showResult) PushData();
 	}, [showResult]);
 
 	if (showResult) {
@@ -91,27 +92,29 @@ export default function QuizHTML({ questions, theme }) {
 	}
 
 	return (
-		<div style={{ marginBottom: '20px' }} className="quizDiv">
+		<div className="quizDiv">
 			<h3 className="question">
 				Question {currentIndex + 1}: {currentQuestion.question}
 			</h3>
-
-			<ul style={{ listStyle: 'none', padding: 0 }} className="answers">
+			<ul className="answers" style={{ listStyle: 'none', padding: 0 }}>
 				{currentQuestion.options?.map((option, i) => (
 					<li
 						key={i}
+						className="answer"
 						onClick={() => handleOptionClick(i)}
 						style={{
 							backgroundColor:
 								selectedOption === i ? (i === currentQuestion.correctAnswer ? 'lightgreen' : 'salmon') : '#f0f0f0',
-							cursor: 'pointer',
+							cursor: selectedOption === null ? 'pointer' : 'default',
 						}}
-						className="answer"
 					>
 						{option}
 					</li>
 				))}
 			</ul>
+			<button onClick={handleNext} className="nextBtn">
+				Next
+			</button>
 		</div>
 	);
 }
