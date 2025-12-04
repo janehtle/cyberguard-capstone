@@ -10,32 +10,42 @@ export default function Login() {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		// POST to backend to login
-		fetch('/api/auth/login', {
-			method: 'POST',
+    try {
+      const res = await fetch('/api/auth/login', {			
+      method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
 			body: JSON.stringify({ email: formData.email, password: formData.password }),
-		})
-			.then(async (res) => {
-				const data = await res.json();
-				if (!res.ok) throw new Error(data.msg || data.error || 'Login failed');
-				// Store token and user
+  });
+
+			// Try to parse JSON safely
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (jsonError) {
+        throw new Error("Server returned invalid JSON (possible 404, proxy issue, or backend crash)");
+      }
+
+if (!res.ok) {
+        throw new Error(data?.msg || data?.error || 'Login failed');
+      }
+      	// Store token and user
 				if (data.token) {
 					localStorage.setItem('token', data.token);
-				}
+        }
 				if (data.user) {
 					localStorage.setItem('user', JSON.stringify(data.user));
-				}
+        }
 				navigate('/');
-			})
-			.catch((err) => {
+			} catch (err) {
 				console.error('Login error:', err);
 				// Show brief error to user
 				alert(err.message || 'Login failed');
-			});
+			}
 	};
 
 	return (
@@ -91,5 +101,5 @@ export default function Login() {
 				</p>
 			</div>
 		</div>
-	);
+  );
 }
