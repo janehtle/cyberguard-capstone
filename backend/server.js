@@ -18,18 +18,15 @@ dotenv.config();
 const app = express();
 
 // ------------------ CORS ------------------
-const allowedOrigins = ['http://localhost:5173', 'https://dev.d1thswjv0p8u6t.amplifyapp.com'];
+const allowedOrigins = [
+	'http://localhost:5173',
+	'https://dev.d1thswjv0p8u6t.amplifyapp.com',
+	'https://cyberguard-capstone.onrender.com',
+];
 
 app.use(
 	cors({
-		origin: function (origin, callback) {
-			if (!origin || allowedOrigins.includes(origin)) {
-				callback(null, true);
-			} else {
-				console.log('❌ Blocked by CORS:', origin);
-				callback(new Error('CORS blocked'));
-			}
-		},
+		origin: allowedOrigins,
 		credentials: true,
 	})
 );
