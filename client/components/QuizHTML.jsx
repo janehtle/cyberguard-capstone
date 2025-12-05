@@ -8,8 +8,8 @@ export default function QuizHTML({ questions, theme }) {
 	const [showResult, setShowResult] = useState(false);
 
 	const currentQuestion = questions?.[currentIndex] || {};
-	// If VITE_API_URL is not provided (monorepo), use same-origin
-	const API_URL = import.meta.env.VITE_API_URL || '';
+	const API_URL =
+		import.meta.env.MODE === 'development' ? 'http://localhost:5000' : 'https://cyberguard-capstone.onrender.com';
 
 	const PushData = async () => {
 		try {
