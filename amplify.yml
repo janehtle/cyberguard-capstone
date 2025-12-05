@@ -1,16 +1,20 @@
 version: 1
 applications:
-  - appRoot: client    
+  - appRoot: client
+    backend:
+      phases:
+        build:
+          commands: []
     frontend:
       phases:
         preBuild:
           commands:
-            - npm install      
+            - npm ci
         build:
           commands:
-            - npm run build     
+            - npm run build
       artifacts:
-        baseDirectory: dist    
+        baseDirectory: dist
         files:
           - '**/*'
       cache:
