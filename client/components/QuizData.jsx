@@ -7,8 +7,7 @@ export default function QuizData({ theme }) {
 	const [error, setError] = useState('');
 
 	// If VITE_API_URL is not set (monorepo / single-server), default to same-origin
-	const API_URL =
-		import.meta.env.MODE === 'development' ? 'http://localhost:5000' : 'https://cyberguard-capstone.onrender.com';
+	const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 	useEffect(() => {
 		if (!theme) return;
