@@ -44,9 +44,7 @@ export default function Header() {
 							</li>
 						)}
 						<li>
-							<button onClick={logout} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-								Logout
-							</button>
+							<button onClick={logout}>Logout</button>
 						</li>
 					</>
 				)}
