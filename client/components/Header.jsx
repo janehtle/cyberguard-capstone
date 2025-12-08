@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import '../styles/header.css';
 import Logo from '../assets/logo-removebg.png';
 import { Link } from 'react-router-dom';
+import { AuthContext } from './AuthConext'; // <-- make sure this path matches your file
 
 export default function Header() {
+	const { user, logout } = useContext(AuthContext);
+
 	return (
 		<header>
 			<Link to="/">
@@ -19,12 +22,34 @@ export default function Header() {
 					<Link to="/quizhome">Quiz</Link>
 				</li>
 
-				<li>
-					<Link to="/login">Login</Link>
-				</li>
-				<li>
-					<Link to="/admin">Admin</Link>
-				</li>
+				{!user && (
+					<>
+						<li>
+							<Link to="/login">Login</Link>
+						</li>
+						<li>
+							<Link to="/signup">Signup</Link>
+						</li>
+					</>
+				)}
+
+				{user && (
+					<>
+						<li>
+							<Link to="/userdashboard">Dashboard</Link>
+						</li>
+						{user.role === 'admin' && (
+							<li>
+								<Link to="/admin">Admin</Link>
+							</li>
+						)}
+						<li>
+							<button onClick={logout} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+								Logout
+							</button>
+						</li>
+					</>
+				)}
 			</ul>
 		</header>
 	);
