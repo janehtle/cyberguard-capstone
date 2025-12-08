@@ -1,208 +1,218 @@
-import React, { useState, useEffect } from "react";
-import "../styles/admin.css";
+import React, { useState, useEffect } from 'react';
+import '../styles/admin.css';
 
 const AdminDashboard = () => {
-  const yourAuthToken = "TEST_TOKEN";
+	const [recentAttempts, setRecentAttempts] = useState([]);
+	const [users, setUsers] = useState([]);
+	const [topicData, setTopicData] = useState([]);
+	const [stats, setStats] = useState({
+		totalQuizzesTaken: 0,
+		averageScore: 0,
+		totalUsers: 0,
+		activeTopics: 0,
+	});
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
-  // ===== REAL STATE (only one declaration each) =====
-  const [recentAttempts, setRecentAttempts] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [topicData, setTopicData] = useState([]);
+	const API_URL = import.meta.env.VITE_API_URL || '';
+	const token = localStorage.getItem('token');
 
-  // ===== LOAD DATA ON MOUNT =====
-  useEffect(() => {
-    // Remove backend code until connected
-    loadDemoData();
-  }, []);
+	useEffect(() => {
+		const fetchAdminData = async () => {
+			if (!token) {
+				setError('No authentication token found');
+				setLoading(false);
+				return;
+			}
 
-  // ===== TEMP DEMO DATA =====
-  const loadDemoData = () => {
-    setRecentAttempts([
-      {
-        id: 1,
-        userId: 101,
-        user: "John Doe",
-        quizTitle: "JavaScript Basics",
-        score: 85,
-        dateCompleted: "2024-11-28",
-        weakAreas: "Closures, Promises",
-      },
-      {
-        id: 2,
-        userId: 102,
-        user: "Jane Smith",
-        quizTitle: "React Fundamentals",
-        score: 92,
-        dateCompleted: "2024-11-27",
-        weakAreas: "Hooks",
-      },
-      {
-        id: 3,
-        userId: 103,
-        user: "Mike Johnson",
-        quizTitle: "CSS Advanced",
-        score: 78,
-        dateCompleted: "2024-11-26",
-        weakAreas: "Grid, Flexbox",
-      },
-    ]);
+			try {
+				setLoading(true);
+				setError(null);
 
-    setUsers([
-      {
-        id: 101,
-        name: "John Doe",
-        email: "john@example.com",
-        joinDate: "2024-01-15",
-        quizzesTaken: 12,
-      },
-      {
-        id: 102,
-        name: "Jane Smith",
-        email: "jane@example.com",
-        joinDate: "2024-02-20",
-        quizzesTaken: 8,
-      },
-      {
-        id: 103,
-        name: "Mike Johnson",
-        email: "mike@example.com",
-        joinDate: "2024-03-10",
-        quizzesTaken: 15,
-      },
-      {
-        id: 104,
-        name: "Sarah Williams",
-        email: "sarah@example.com",
-        joinDate: "2024-04-05",
-        quizzesTaken: 6,
-      },
-    ]);
+				const headers = {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				};
 
-    setTopicData([
-      { topic: "JavaScript", attempts: 145, avgScore: 82 },
-      { topic: "React", attempts: 98, avgScore: 88 },
-      { topic: "CSS", attempts: 87, avgScore: 75 },
-      { topic: "Node.js", attempts: 62, avgScore: 79 },
-    ]);
-  };
+				// Fetch recent attempts
+				const attemptsRes = await fetch(`${API_URL}/api/admin/recent-attempts`, { headers });
+				const attemptsData = await attemptsRes.json();
+				setRecentAttempts(attemptsData.attempts || attemptsData || []);
 
-  // ===== DELETE USER =====
-  const handleDeleteUser = (userId) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      setUsers(users.filter((u) => u.id !== userId));
-      alert("User deleted (Demo mode)");
-    }
-  };
+				// Fetch users
+				const usersRes = await fetch(`${API_URL}/api/admin/users`, { headers });
+				const usersData = await usersRes.json();
+				setUsers(usersData.users || usersData || []);
 
-  return (
-    <div className="admin-page">
-      <div className="admin-header">
-        <h1>Admin Dashboard</h1>
-      </div>
+				// Fetch topic stats
+				const topicsRes = await fetch(`${API_URL}/api/admin/topics`, { headers });
+				const topicsData = await topicsRes.json();
+				setTopicData(topicsData.topics || topicsData || []);
+			} catch (err) {
+				console.error('Error fetching admin data:', err);
+				setError(err.message || 'Failed to load admin data');
+			} finally {
+				setLoading(false);
+			}
+		};
 
-      <div className="admin-container">
-        {/* Stats */}
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-value">1,247</div>
-            <div className="stat-label">Total Quizzes Taken</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">84.2%</div>
-            <div className="stat-label">Average Score</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">356</div>
-            <div className="stat-label">Total Users</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">12</div>
-            <div className="stat-label">Active Topics</div>
-          </div>
-        </div>
+		fetchAdminData();
+	}, [API_URL, token]);
 
-        <div className="content-grid">
-          {/* Recent Attempts */}
-          <div className="content-section">
-            <h2>Recent Quiz Attempts</h2>
+	// Calculate stats dynamically
+	useEffect(() => {
+		setStats({
+			totalQuizzesTaken: recentAttempts.length,
+			averageScore:
+				recentAttempts.length > 0
+					? (recentAttempts.reduce((sum, a) => sum + (a.score || 0), 0) / recentAttempts.length).toFixed(1)
+					: 0,
+			totalUsers: users.length,
+			activeTopics: topicData.length,
+		});
+	}, [recentAttempts, users, topicData]);
 
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Quiz</th>
-                  <th>Score</th>
-                  <th>Date</th>
-                  <th>Weak Areas</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentAttempts.map((attempt) => (
-                  <tr key={attempt.id}>
-                    <td>{attempt.user}</td>
-                    <td>{attempt.quizTitle}</td>
-                    <td>{attempt.score}%</td>
-                    <td>{attempt.dateCompleted}</td>
-                    <td>{attempt.weakAreas}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+	const handleDeleteUser = async (userId) => {
+		if (!window.confirm('Are you sure you want to delete this user?')) return;
+		try {
+			const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
+				method: 'DELETE',
+				headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+			});
+			if (res.ok) {
+				setUsers(users.filter((u) => u.id !== userId));
+				alert('User deleted successfully');
+			} else {
+				alert('Failed to delete user');
+			}
+		} catch (err) {
+			console.error(err);
+			alert('Error deleting user');
+		}
+	};
 
-          {/* Topic Data */}
-          <div className="sidebar-section">
-            <h2>Overall Topic Data</h2>
+	if (loading) return <p>Loading admin data...</p>;
+	if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
 
-            {topicData.map((topic, index) => (
-              <div className="topic-card" key={index}>
-                <div className="topic-name">{topic.topic}</div>
-                <div className="topic-stats">
-                  <span>{topic.attempts} attempts</span>
-                  <span>Avg: {topic.avgScore}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+	return (
+		<div className="admin-page">
+			<div className="admin-header">
+				<h1>Admin Dashboard</h1>
+			</div>
 
-        {/* User Table */}
-        <div className="user-management-section">
-          <h2>User Management</h2>
+			<div className="admin-container">
+				{/* Stats */}
+				<div className="stats-grid">
+					<div className="stat-card">
+						<div className="stat-value">{stats.totalQuizzesTaken}</div>
+						<div className="stat-label">Total Quizzes Taken</div>
+					</div>
+					<div className="stat-card">
+						<div className="stat-value">{stats.averageScore}%</div>
+						<div className="stat-label">Average Score</div>
+					</div>
+					<div className="stat-card">
+						<div className="stat-value">{stats.totalUsers}</div>
+						<div className="stat-label">Total Users</div>
+					</div>
+					<div className="stat-card">
+						<div className="stat-value">{stats.activeTopics}</div>
+						<div className="stat-label">Active Topics</div>
+					</div>
+				</div>
 
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Join Date</th>
-                <th>Quizzes Taken</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u.id}>
-                  <td>{u.name}</td>
-                  <td>{u.email}</td>
-                  <td>{u.joinDate}</td>
-                  <td>{u.quizzesTaken}</td>
-                  <td>
-                    <button
-                      onClick={() => handleDeleteUser(u.id)}
-                      className="delete-btn"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
+				{/* Recent Attempts */}
+				<div className="content-section">
+					<h2>Recent Quiz Attempts</h2>
+					<table className="data-table">
+						<thead>
+							<tr>
+								<th>User</th>
+								<th>Topic</th>
+								<th>Score</th>
+								<th>Date</th>
+								<th>Correct / Incorrect</th>
+							</tr>
+						</thead>
+						<tbody>
+							{recentAttempts.length > 0 ? (
+								recentAttempts.map((a) => (
+									<tr key={a.id}>
+										<td>{a.username || a.user || 'Unknown'}</td>
+										<td>{a.theme || a.topic || 'N/A'}</td>
+										<td>{a.score || 0}%</td>
+										<td>{a.timestamp ? new Date(a.timestamp).toLocaleDateString() : 'N/A'}</td>
+										<td>
+											{a.correct_answers || 0} / {a.incorrect_answers || 0}
+										</td>
+									</tr>
+								))
+							) : (
+								<tr>
+									<td colSpan="5">No recent attempts found</td>
+								</tr>
+							)}
+						</tbody>
+					</table>
+				</div>
+
+				{/* Topic Data */}
+				<div className="sidebar-section">
+					<h2>Overall Topic Data</h2>
+					{topicData.length > 0 ? (
+						topicData.map((t, idx) => (
+							<div className="topic-card" key={idx}>
+								<div className="topic-name">{t.topic || t.theme || 'Unknown'}</div>
+								<div className="topic-stats">
+									<span>{t.attempts || 0} attempts</span>
+									<span>Avg: {t.avgScore || t.avg_score || 0}%</span>
+								</div>
+							</div>
+						))
+					) : (
+						<p>No topic data available</p>
+					)}
+				</div>
+
+				{/* User Table */}
+				<div className="user-management-section">
+					<h2>User Management</h2>
+					<table className="data-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Join Date</th>
+								<th>Quizzes Taken</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{users.length > 0 ? (
+								users.map((u) => (
+									<tr key={u.id}>
+										<td>{u.username || u.name || 'Unknown'}</td>
+										<td>{u.email || 'N/A'}</td>
+										<td>{u.created_at ? new Date(u.created_at).toLocaleDateString() : 'N/A'}</td>
+										<td>{u.quizzesTaken || 0}</td>
+										<td>
+											<button onClick={() => handleDeleteUser(u.id)} className="delete-btn">
+												Delete
+											</button>
+										</td>
+									</tr>
+								))
+							) : (
+								<tr>
+									<td colSpan="5">No users found</td>
+								</tr>
+							)}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default AdminDashboard;

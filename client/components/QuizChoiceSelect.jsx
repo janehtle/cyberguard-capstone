@@ -34,7 +34,7 @@ export default function QuizChoiceSelect() {
 	}
 
 	return (
-		<div>
+		<div className="quiz-choice-container">
 			<h2>Select a quiz topic</h2>
 			{quizTopics.map((choice) => (
 				<QuizButton key={choice} value={choice} onClick={handleClick} className="quizBtn" />
