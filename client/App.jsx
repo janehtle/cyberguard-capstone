@@ -8,20 +8,24 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import User from './pages/User';
 import Admin from './pages/Admin';
+import { AuthProvider } from './components/AuthConext';
+
 function App() {
 	return (
-		<BrowserRouter>
-			<Layout>
-				<Routes>
-					<Route path="/" element={<Homepage />} />
-					<Route path="/quizhome" element={<Quiz />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/signup" element={<Signup />} />
-					<Route path="/userdashboard" element={<User />} />
-					<Route path="/admin" element={<Admin />} />
-				</Routes>
-			</Layout>
-		</BrowserRouter>
+		<AuthProvider>
+			<BrowserRouter>
+				<Layout>
+					<Routes>
+						<Route path="/" element={<Homepage />} />
+						<Route path="/quizhome" element={<Quiz />} />
+						<Route path="/login" element={<Login />} />
+						<Route path="/signup" element={<Signup />} />
+						<Route path="/userdashboard" element={<User />} />
+						<Route path="/admin" element={<Admin />} />
+					</Routes>
+				</Layout>
+			</BrowserRouter>
+		</AuthProvider>
 	);
 }
 

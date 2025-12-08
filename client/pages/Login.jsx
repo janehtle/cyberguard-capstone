@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/login.css';
+import { AuthContext } from '../components/AuthConext'; // make sure path is correct
 
 export default function Login() {
 	const navigate = useNavigate();
+	const { login } = useContext(AuthContext); // ✅ use login from context
 	const DB_URL = import.meta.env.DB_URL || 'http://localhost:5000';
 	const [formData, setFormData] = useState({ email: '', password: '' });
 
@@ -14,7 +16,6 @@ export default function Login() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		// POST to backend to login
 		try {
 			const res = await fetch(`${DB_URL}/api/auth/login`, {
 				method: 'POST',
@@ -23,28 +24,23 @@ export default function Login() {
 				body: JSON.stringify({ email: formData.email, password: formData.password }),
 			});
 
-			// Try to parse JSON safely
-			let data = null;
-			try {
-				data = await res.json();
-			} catch (jsonError) {
-				throw new Error('Server returned invalid JSON (possible 404, proxy issue, or backend crash)');
-			}
+			const data = await res.json();
 
 			if (!res.ok) {
 				throw new Error(data?.msg || data?.error || 'Login failed');
 			}
-			// Store token and user
-			if (data.token) {
-				localStorage.setItem('token', data.token);
-			}
+
+			// ✅ Save token if present
+			if (data.token) localStorage.setItem('token', data.token);
+
+			// ✅ Update context and localStorage
 			if (data.user) {
-				localStorage.setItem('user', JSON.stringify(data.user));
+				login(data.user); // THIS triggers Header to re-render
 			}
-			navigate('/');
+
+			navigate('/'); // redirect after login
 		} catch (err) {
 			console.error('Login error:', err);
-			// Show brief error to user
 			alert(err.message || 'Login failed');
 		}
 	};
@@ -80,16 +76,6 @@ export default function Login() {
 							autoComplete="current-password"
 							required
 						/>
-					</div>
-
-					<div className="form-extras">
-						<label className="remember-me">
-							<input type="checkbox" />
-							<span>Remember me</span>
-						</label>
-						<Link to="/forgot-password" className="forgot-link">
-							Forgot password?
-						</Link>
 					</div>
 
 					<button type="submit" className="login-btn">
