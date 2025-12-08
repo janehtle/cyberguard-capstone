@@ -4,6 +4,7 @@ import '../styles/login.css';
 
 export default function Login() {
 	const navigate = useNavigate();
+	const DB_URL = import.meta.env.DB_URL || 'http://localhost:5000';
 	const [formData, setFormData] = useState({ email: '', password: '' });
 
 	const handleChange = (e) => {
@@ -14,38 +15,38 @@ export default function Login() {
 		e.preventDefault();
 
 		// POST to backend to login
-    try {
-      const res = await fetch('/api/auth/login', {			
-      method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-			body: JSON.stringify({ email: formData.email, password: formData.password }),
-  });
+		try {
+			const res = await fetch(`${DB_URL}/api/auth/login`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				credentials: 'include',
+				body: JSON.stringify({ email: formData.email, password: formData.password }),
+			});
 
 			// Try to parse JSON safely
-      let data = null;
-      try {
-        data = await res.json();
-      } catch (jsonError) {
-        throw new Error("Server returned invalid JSON (possible 404, proxy issue, or backend crash)");
-      }
-
-if (!res.ok) {
-        throw new Error(data?.msg || data?.error || 'Login failed');
-      }
-      	// Store token and user
-				if (data.token) {
-					localStorage.setItem('token', data.token);
-        }
-				if (data.user) {
-					localStorage.setItem('user', JSON.stringify(data.user));
-        }
-				navigate('/');
-			} catch (err) {
-				console.error('Login error:', err);
-				// Show brief error to user
-				alert(err.message || 'Login failed');
+			let data = null;
+			try {
+				data = await res.json();
+			} catch (jsonError) {
+				throw new Error('Server returned invalid JSON (possible 404, proxy issue, or backend crash)');
 			}
+
+			if (!res.ok) {
+				throw new Error(data?.msg || data?.error || 'Login failed');
+			}
+			// Store token and user
+			if (data.token) {
+				localStorage.setItem('token', data.token);
+			}
+			if (data.user) {
+				localStorage.setItem('user', JSON.stringify(data.user));
+			}
+			navigate('/');
+		} catch (err) {
+			console.error('Login error:', err);
+			// Show brief error to user
+			alert(err.message || 'Login failed');
+		}
 	};
 
 	return (
@@ -101,5 +102,5 @@ if (!res.ok) {
 				</p>
 			</div>
 		</div>
-  );
+	);
 }
