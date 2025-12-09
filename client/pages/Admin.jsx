@@ -37,14 +37,26 @@ const AdminDashboard = () => {
 				// Fetch recent attempts
 				const attemptsRes = await fetch(`${API_URL}/api/admin/recent-attempts`, { headers });
 				const attemptsData = await attemptsRes.json();
-				setRecentAttempts(attemptsData.attempts || attemptsData || []);
+
+				// Add correct score calculation
+				const calculatedAttempts = (attemptsData.attempts || attemptsData || []).map((a) => {
+					const correct = a.correct_answers || 0;
+					const incorrect = a.incorrect_answers || 0;
+					const total = correct + incorrect;
+
+					const score = total > 0 ? Number(((correct / total) * 100).toFixed(1)) : 0;
+
+					return { ...a, score };
+				});
+
+				setRecentAttempts(calculatedAttempts);
 
 				// Fetch users
 				const usersRes = await fetch(`${API_URL}/api/admin/users`, { headers });
 				const usersData = await usersRes.json();
 				setUsers(usersData.users || usersData || []);
 
-				// Fetch topic stats
+				// Fetch topics
 				const topicsRes = await fetch(`${API_URL}/api/admin/topics`, { headers });
 				const topicsData = await topicsRes.json();
 				setTopicData(topicsData.topics || topicsData || []);
@@ -59,14 +71,16 @@ const AdminDashboard = () => {
 		fetchAdminData();
 	}, [API_URL, token]);
 
-	// Calculate stats dynamically
+	// Compute stats dynamically
 	useEffect(() => {
+		const average =
+			recentAttempts.length > 0
+				? (recentAttempts.reduce((sum, a) => sum + (a.score || 0), 0) / recentAttempts.length).toFixed(1)
+				: 0;
+
 		setStats({
 			totalQuizzesTaken: recentAttempts.length,
-			averageScore:
-				recentAttempts.length > 0
-					? (recentAttempts.reduce((sum, a) => sum + (a.score || 0), 0) / recentAttempts.length).toFixed(1)
-					: 0,
+			averageScore: average,
 			totalUsers: users.length,
 			activeTopics: topicData.length,
 		});
@@ -74,11 +88,16 @@ const AdminDashboard = () => {
 
 	const handleDeleteUser = async (userId) => {
 		if (!window.confirm('Are you sure you want to delete this user?')) return;
+
 		try {
 			const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
 				method: 'DELETE',
-				headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
 			});
+
 			if (res.ok) {
 				setUsers(users.filter((u) => u.id !== userId));
 				alert('User deleted successfully');
@@ -140,7 +159,7 @@ const AdminDashboard = () => {
 									<tr key={a.id}>
 										<td>{a.username || a.user || 'Unknown'}</td>
 										<td>{a.theme || a.topic || 'N/A'}</td>
-										<td>{a.score || 0}%</td>
+										<td>{a.score}%</td>
 										<td>{a.timestamp ? new Date(a.timestamp).toLocaleDateString() : 'N/A'}</td>
 										<td>
 											{a.correct_answers || 0} / {a.incorrect_answers || 0}
@@ -156,7 +175,7 @@ const AdminDashboard = () => {
 					</table>
 				</div>
 
-				{/* Topic Data */}
+				{/* Topic Overview */}
 				<div className="sidebar-section">
 					<h2>Overall Topic Data</h2>
 					{topicData.length > 0 ? (
@@ -174,7 +193,7 @@ const AdminDashboard = () => {
 					)}
 				</div>
 
-				{/* User Table */}
+				{/* User Management */}
 				<div className="user-management-section">
 					<h2>User Management</h2>
 					<table className="data-table">
