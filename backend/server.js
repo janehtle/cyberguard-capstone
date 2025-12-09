@@ -65,6 +65,7 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_APIKEY });
 app.post('/api/response', async (req, res) => {
 	const { theme, score } = req.body;
 	const numOfQuestions = 3;
+	const randomSeed = Math.floor(Math.random() * 10000);
 
 	const systemPrompt = `
     Generate exactly ${numOfQuestions} cybersecurity questions about "${theme}". 
@@ -73,6 +74,8 @@ app.post('/api/response', async (req, res) => {
     Return strictly valid JSON:
       { listOfQuestions: [{"question":"string","options":["string"],"correctAnswer":0}] }
     No extra text or explanations.
+	(Seed: ${randomSeed})
+
   `;
 
 	try {
