@@ -115,7 +115,7 @@ export default function QuizHTML({ questions, theme }) {
 				))}
 			</ul>
 
-			<button onClick={handleNext} className="nextBtn">
+			<button onClick={handleNext} className="submitBtn">
 				Next
 			</button>
 		</div>
